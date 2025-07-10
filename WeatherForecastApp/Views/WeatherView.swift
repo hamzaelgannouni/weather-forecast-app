@@ -8,21 +8,20 @@
 import SwiftUI
 
 struct WeatherView: View {
-    let hourlyWeatherData: [HourlyWeatherData]
-    let isOffline: Bool
-    let statusMessage: String
+    @StateObject private var viewModel = WeatherViewModel()
+    @State private var isRefreshing = false
     
     var body: some View {
         NavigationView {
             List {
-                ForEach(hourlyWeatherData) { weather in
+                ForEach(viewModel.hourlyWeatherData) { weather in
                     HourlyWeatherRow(weather: weather)
                 }
                 
-                if !isOffline {
+                if !viewModel.isOffline {
                     StatusSection(
-                        statusMessage: statusMessage,
-                        isOffline: isOffline
+                        statusMessage: viewModel.statusMessage,
+                        isOffline: viewModel.isOffline
                     )
                     .listRowSeparator(.hidden)
                 } else {
@@ -32,35 +31,42 @@ struct WeatherView: View {
             }
             .listStyle(PlainListStyle())
             .navigationTitle("Hourly Weather")
+            .refreshable {
+                await refreshWeatherData()
+            }
+            .overlay(
+                Group {
+                    if viewModel.isLoading && viewModel.hourlyWeatherData.isEmpty {
+                        LoadingView()
+                    }
+                }
+            )
+            .alert("Weather Alert", isPresented: $viewModel.showingError) {
+                Button("OK") {
+                    viewModel.dismissError()
+                }
+            } message: {
+                Text(viewModel.errorMessage ?? "Unknown error occurred")
+            }
         }
+        .task {
+            await viewModel.loadWeatherData()
+        }
+    }
+    
+    private func refreshWeatherData() async {
+        isRefreshing = true
+        await viewModel.refreshWeatherData()
+        isRefreshing = false
     }
 }
 
 struct WeatherView_Previews: PreviewProvider {
     static var previews: some View {
-        WeatherView(
-            hourlyWeatherData: [
-                HourlyWeatherData(
-                    time: Date(),
-                    temperature: 68,
-                    temperatureApparent: 70,
-                    weatherCode: 1000,
-                    windSpeed: 4.5,
-                    precipitationIntensity: 0,
-                    cloudCover: 0
-                ),
-                HourlyWeatherData(
-                    time: Date().addingTimeInterval(3600),
-                    temperature: 65,
-                    temperatureApparent: 66,
-                    weatherCode: 1101,
-                    windSpeed: 6.2,
-                    precipitationIntensity: 0,
-                    cloudCover: 0.2
-                )
-            ],
-            isOffline: false,
-            statusMessage: "All data up to date"
-        )
+        WeatherView()
+            .preferredColorScheme(.light)
+        
+        WeatherView()
+            .preferredColorScheme(.dark)
     }
 }
