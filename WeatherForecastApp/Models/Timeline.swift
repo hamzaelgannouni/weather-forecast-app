@@ -13,3 +13,10 @@ struct Timeline: Codable {
     let endTime: String?
     let intervals: [WeatherInterval]
 }
+
+extension Timeline {
+    var hourlyIntervals: [WeatherInterval] {
+        return timestep == "1h" ? intervals : []
+    }
+}
+
