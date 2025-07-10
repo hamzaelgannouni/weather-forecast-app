@@ -6,9 +6,9 @@
 //
 
 import Testing
-@testable import weather_forecast_app
+@testable import WeatherForecastApp
 
-struct weather_forecast_appTests {
+struct WeatherForecast_appTests {
 
     @Test func example() async throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
