@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WarningMeta: Decodable {
+struct WarningMeta: Codable {
     let timestep: String?
     let from: String?
     let to: String?

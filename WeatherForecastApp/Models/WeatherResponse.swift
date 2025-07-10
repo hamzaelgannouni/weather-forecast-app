@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherResponse: Decodable {
+struct WeatherResponse: Codable {
     let data: WeatherData
     let warnings: [WeatherWarning]?
 }

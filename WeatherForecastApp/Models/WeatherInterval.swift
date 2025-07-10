@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherInterval: Decodable {
+struct WeatherInterval: Codable {
     let startTime: String
     let values: WeatherValues
     

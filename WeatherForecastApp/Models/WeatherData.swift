@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct WeatherData: Decodable {
+struct WeatherData: Codable {
     let timelines: [Timeline]
 }

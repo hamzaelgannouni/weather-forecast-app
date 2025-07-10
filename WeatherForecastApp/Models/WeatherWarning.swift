@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherWarning: Decodable {
+struct WeatherWarning: Codable {
     let code: Int
     let type: String
     let message: String

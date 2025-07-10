@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Timeline: Decodable {
+struct Timeline: Codable {
     let timestep: String
     let startTime: String?
     let endTime: String?

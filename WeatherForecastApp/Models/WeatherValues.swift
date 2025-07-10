@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherValues: Decodable {
+struct WeatherValues: Codable {
     let precipitationIntensity: Double?
     let precipitationType: Int?
     let windSpeed: Double
